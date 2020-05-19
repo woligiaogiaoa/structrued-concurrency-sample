@@ -1,4 +1,4 @@
-package com.jsn.android.ffmpegplayground.search.data
+package com.jsn.android.search.data
 
 import java.lang.RuntimeException
 

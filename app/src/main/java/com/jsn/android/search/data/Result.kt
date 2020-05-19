@@ -1,4 +1,4 @@
-package com.jsn.android.ffmpegplayground
+package com.jsn.android.search
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LifecycleOwner

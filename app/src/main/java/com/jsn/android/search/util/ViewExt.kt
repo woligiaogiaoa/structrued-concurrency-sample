@@ -1,4 +1,4 @@
-package com.jsn.android.ffmpegplayground
+package com.jsn.android.search
 
 import android.annotation.SuppressLint
 import android.os.Build

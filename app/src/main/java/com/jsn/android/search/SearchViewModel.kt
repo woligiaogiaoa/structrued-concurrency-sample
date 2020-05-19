@@ -1,9 +1,8 @@
-package com.jsn.android.ffmpegplayground.search
+package com.jsn.android.search
 
 import androidx.lifecycle.*
-import com.jsn.android.ffmpegplayground.Result
-import com.jsn.android.ffmpegplayground.search.data.SearchRepository
-import com.jsn.android.ffmpegplayground.search.data.SearchSource
+import com.jsn.android.search.data.SearchRepository
+import com.jsn.android.search.data.SearchSource
 import kotlinx.coroutines.Dispatchers
 import java.lang.Exception
 
@@ -23,12 +22,7 @@ class SearchViewModel(val repository: SearchSource):ViewModel(){
     }
 }
 
-@Suppress("UNCHECKED_CAST")
-class SearchViewModelFactory(val repository: SearchSource):ViewModelProvider.Factory{
-    override fun <T : ViewModel?> create(viewModel: Class<T>): T {
-        return SearchViewModel(repository) as T
-    }
-}
+
 
 
 

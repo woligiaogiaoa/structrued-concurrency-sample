@@ -1,4 +1,4 @@
-
+package  com.jsn.android.search
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,12 +10,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jsn.android.R
-import com.jsn.android.ffmpegplayground.*
-import com.jsn.android.ffmpegplayground.search.SearchAdapter
-import com.jsn.android.ffmpegplayground.search.SearchViewModel
-import com.jsn.android.ffmpegplayground.search.data.SearchLocalSource
-import com.jsn.android.ffmpegplayground.search.data.SearchRemoteSource
-import com.jsn.android.ffmpegplayground.search.data.SearchRepository
+import com.jsn.android.search.*
+import com.jsn.android.search.SearchAdapter
+import com.jsn.android.search.SearchViewModel
+import com.jsn.android.search.data.SearchLocalSource
+import com.jsn.android.search.data.SearchRemoteSource
+import com.jsn.android.search.data.SearchRepository
 import kotlinx.android.synthetic.main.activity_search.*
 
 class SearchActivity : AppCompatActivity() {
@@ -58,6 +58,21 @@ class SearchActivity : AppCompatActivity() {
             }
         }
     }
+}
+
+fun Boolean.toVisibility()=if(this) View.VISIBLE else View.GONE
+
+fun Context.showMessage(data:String)= Toast.makeText(this,data, Toast.LENGTH_SHORT).show()
+
+fun debug(s :String)= Log.e(TAG,s)
+
+const val TAG="吐了"
+
+object InjectorUtil{
+    fun provideSearchLocalSource()=SearchLocalSource.instance
+    fun provideSearchRemoteSource()=SearchRemoteSource.instance
+    fun provideSearchViewModelFactory()=
+        SearchViewModelFactory(SearchRepository(provideSearchRemoteSource(), provideSearchLocalSource()))
 }
 
 

@@ -1,4 +1,4 @@
-package com.jsn.android.ffmpegplayground.search
+package com.jsn.android.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
