@@ -111,13 +111,13 @@ data class InitialPadding(val left: Int, val top: Int,
 private fun recordInitialPaddingForView(view: View) = InitialPadding(
         view.paddingLeft, view.paddingTop, view.paddingRight, view.paddingBottom)
 
-fun View.setSafeClickListener(action:()->Unit){
+inline fun View.setSafeClickListener(clickInterval:Long=1500L,
+                                     crossinline action: ()->Unit){
     var last=0L
     setOnClickListener {
         val gap = System.currentTimeMillis() - last
         last=System.currentTimeMillis()
-        if(gap<1000) return@setOnClickListener
+        if(gap<clickInterval) return@setOnClickListener
         action.invoke()
     }
-
 }

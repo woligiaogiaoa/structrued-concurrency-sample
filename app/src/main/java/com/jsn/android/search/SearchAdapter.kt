@@ -21,9 +21,8 @@ val callback=object :DiffUtil.ItemCallback<String>(){
 class SearchAdapter : ListAdapter<String, SearchAdapter.SearchViewHolder>(callback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): SearchViewHolder {
-        val inflate =
-            ItemSearchResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return SearchViewHolder(inflate)
+        val binding = ItemSearchResultBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return SearchViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
