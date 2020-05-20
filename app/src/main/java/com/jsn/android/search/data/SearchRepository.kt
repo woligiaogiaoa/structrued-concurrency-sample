@@ -3,6 +3,7 @@ package com.jsn.android.search.data
 import android.util.LruCache
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
+import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.max
 import kotlin.math.min
@@ -29,7 +30,9 @@ class SearchRepository(val searchRemoteSource: SearchSource,
     }
 }
 
-/*-------------------------lru扩展函数，多线程环境下，保证LruCache的put，get操作的原子性，从而实现线程安全*/
+/*-------------------------LruCache扩展函数，多线程环境下，保证LruCache的put，get操作的原子性，从而实现线程安全
+*                          自定义了线程 操作失败到下次重试的时间间隔。如果不需要自定义，可以直接使用Collections.synchronizedMap(LinkedHashMap())来实现
+*                          一个线程安全的LruCache       */
 
 
 suspend fun <K,V> LruCache<K,V>.atomicallyPut(key:K, value:V, pending:AtomicBoolean ){
