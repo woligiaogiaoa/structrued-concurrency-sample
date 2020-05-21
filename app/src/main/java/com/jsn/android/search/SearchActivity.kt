@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +20,7 @@ class SearchActivity : AppCompatActivity() {
 
     val searchAdapter = SearchAdapter()
 
-    //注入我们的viewModelFactory，在Factory注入viewModel所需的数据层实现类，这里是SearchRepository
+   /* //注入我们的viewModelFactory，在Factory注入viewModel所需的数据层实现类，这里是SearchRepository
     val viewModelFactory by lazy {
         InjectorUtil.provideSearchViewModelFactory()
     }
@@ -29,7 +30,12 @@ class SearchActivity : AppCompatActivity() {
             this,
             viewModelFactory)
             .get(SearchViewModel::class.java)
-    }
+    }*/
+
+    val viewModel by viewModels<SearchViewModel>(
+        InjectorUtil.provideSearchViewModelFactory() )
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

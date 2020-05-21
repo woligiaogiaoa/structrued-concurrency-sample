@@ -44,6 +44,8 @@ dependencies {
 
     implementation "androidx.recyclerview:recyclerview:1.1.0"
 
+    api 'androidx.activity:activity-ktx:1.0.0-alpha01'
+
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
