@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.*
 @ExperimentalCoroutinesApi
 class SearchBarViewModel :ViewModel() {
 
-    //自动处理 backpressure ，真是香死我惹。
+    //自动处理 backpressure ，真是香
     /*
     * 比如我们疯狂的往channel 里面 加关键字 ，可是我们 处理它 没那么快啊，毕竟我们是耗时操作，
-    * 由于 是ConflatedBroadcastChannel（channel的一种，缓存大小为1），那么会取最近传过来的那么值。
+    * 由于 是ConflatedBroadcastChannel（channel的一种，缓存大小为1,自动处理背压），那么会取最近传过来的那么值。
     * 对于我们这个搜索框，这几乎是一种完美的解决方案。
     * */
 
@@ -28,8 +28,8 @@ class SearchBarViewModel :ViewModel() {
             repositoty.filter { candidata ->
                 candidata.contains(keyWord)
             }
-        }
-        .filter {
+        }.
+        filter {
             delay(100) // 假装 很 耗时
             !it.isEmpty()
         }
