@@ -1,6 +1,7 @@
 package com.jsn.android.search.data
 
 import android.util.LruCache
+import com.jsn.android.search.Result
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import java.util.*
@@ -27,6 +28,10 @@ class SearchRepository(val searchRemoteSource: SearchSource,
 
         //从后端获取数据，并存入 lruchche, todo :实现一个本地数据库，存入数据库。
         return searchRemoteSource.search(keyWord).also { searchResultCache.atomicallyPut(keyWord,it,pending) }
+    }
+
+    fun searchFlow()= flow<Result<List<String>>> {
+
     }
 }
 

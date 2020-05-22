@@ -1,4 +1,5 @@
 package  com.jsn.android.search
+
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,21 +21,21 @@ class SearchActivity : AppCompatActivity() {
 
     val searchAdapter = SearchAdapter()
 
-   /* //注入我们的viewModelFactory，在Factory注入viewModel所需的数据层实现类，这里是SearchRepository
-    val viewModelFactory by lazy {
-        InjectorUtil.provideSearchViewModelFactory()
-    }
+    /* //注入我们的viewModelFactory，在Factory注入viewModel所需的数据层实现类，这里是SearchRepository
+     val viewModelFactory by lazy {
+         InjectorUtil.provideSearchViewModelFactory()
+     }
 
-    val viewModel: SearchViewModel by lazy {
-        ViewModelProvider(
-            this,
-            viewModelFactory)
-            .get(SearchViewModel::class.java)
-    }*/
+     val viewModel: SearchViewModel by lazy {
+         ViewModelProvider(
+             this,
+             viewModelFactory)
+             .get(SearchViewModel::class.java)
+     }*/
 
     val viewModel by viewModels<SearchViewModel>(
-        InjectorUtil.provideSearchViewModelFactory() )
-
+        InjectorUtil.provideSearchViewModelFactory()
+    )
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,13 +55,19 @@ class SearchActivity : AppCompatActivity() {
 
     private fun observeState() {
         viewModel.searchResult.observe(this) { result ->
-            progress_bar.visibility = (result is Result.Loading).toVisibility() //只有在loading的时候我们才能看见 progress bar
+            progress_bar.visibility =
+                (result is Result.Loading).toVisibility() //只有在loading的时候我们才能看见 progress bar
             when (result) {
-                is Result.Loading -> { tv_empty_search_result.visibility = View.GONE } //loading的时候我们要隐藏这个text为"无相关内容"的 TextView
-                is Result.Error -> { showMessage(result.toString()) } //出错了，直接toast提示
+                is Result.Loading -> {
+                    tv_empty_search_result.visibility = View.GONE
+                } //loading的时候我们要隐藏这个text为"无相关内容"的 TextView
+                is Result.Error -> {
+                    showMessage(result.toString())
+                } //出错了，直接toast提示
                 is Result.Success -> {
                     searchAdapter.submitList(result.data) //把搜索结果给 recyclerview 展示
-                    tv_empty_search_result.visibility = (result.data.size == 0).toVisibility() //如果返回的数据是空的列表，提示用户无相关内容
+                    tv_empty_search_result.visibility =
+                        (result.data.size == 0).toVisibility() //如果返回的数据是空的列表，提示用户无相关内容
                 }
             }
         }
@@ -74,24 +81,28 @@ class SearchActivity : AppCompatActivity() {
 }
 
 
-
 /*-----------------------utilities-------------------------------*/
 
-object InjectorUtil{
-    fun provideSearchLocalSource():SearchSource=SearchLocalSource.instance
-    fun provideSearchRemoteSource():SearchSource=SearchRemoteSource.instance
+object InjectorUtil {
+    fun provideSearchLocalSource(): SearchSource = SearchLocalSource.instance
+    fun provideSearchRemoteSource(): SearchSource = SearchRemoteSource.instance
     fun provideSearchViewModelFactory(): SearchViewModelFactory = //给factory注入数据层接口实现类
-        SearchViewModelFactory(SearchRepository(provideSearchRemoteSource(), provideSearchLocalSource()))
+        SearchViewModelFactory(
+            SearchRepository(
+                provideSearchRemoteSource(),
+                provideSearchLocalSource()
+            )
+        )
 }
 
 
-fun Boolean.toVisibility()=if(this) View.VISIBLE else View.GONE
+fun Boolean.toVisibility() = if (this) View.VISIBLE else View.GONE
 
-fun Context.showMessage(data:String)= Toast.makeText(this,data, Toast.LENGTH_SHORT).show()
+fun Context.showMessage(data: String) = Toast.makeText(this, data, Toast.LENGTH_SHORT).show()
 
-fun debug(s :String)= Log.e(TAG,s)
+fun debug(s: String) = Log.e(TAG, s)
 
-const val TAG="吐了"
+const val TAG = "吐了"
 
 
 
