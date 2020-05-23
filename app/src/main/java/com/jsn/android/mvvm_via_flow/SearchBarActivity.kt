@@ -7,8 +7,10 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jsn.android.R
+import com.jsn.android.search.Result
 import com.jsn.android.search.SearchActivity
 import com.jsn.android.search.SearchAdapter
+import com.jsn.android.search.showMessage
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -38,10 +40,12 @@ class SearchBarActivity  :AppCompatActivity(){
 
         lifecycleScope.launchWhenStarted {
            viewModel.searchResultFlow.collect { searchResult ->
-               adapter.submitList(searchResult)
+               when(searchResult){
+                   is Result.Loading -> {}
+                   is Result.Error-> { showMessage(searchResult.toString())}
+                   is Result.Success -> {adapter.submitList(searchResult.data) }
+               }
            }
         }
     }
-
-
 }
