@@ -9,6 +9,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.*
+import java.lang.Exception
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -20,7 +21,7 @@ class SearchBarViewModel(val repository :SearchRepository) :ViewModel() {
             =repository.getSearchResult().asLiveData()
 
     val keyWord
-    get() = repository.getValidKeyWordOrNull()
+    get() = repository.keyWordOrNull()
 
 
     fun offer(keyWord:String) =repository.receiveSearchWords(keyWord)
@@ -41,7 +42,7 @@ interface SearchRepository{
 
     fun receiveSearchWords(keyWord: String)
 
-    fun getValidKeyWordOrNull():String?
+    fun keyWordOrNull():String?
 }
 
 @FlowPreview
@@ -61,7 +62,7 @@ class TestSearchRepository :SearchRepository{
             }
             .flowOn(Dispatchers.Default)
             .catch { e ->
-                Result.Error(java.lang.Exception(e.message))
+                Result.Error(Exception(e))
             }
 
     override fun onViewModelClear() {
@@ -72,7 +73,7 @@ class TestSearchRepository :SearchRepository{
         channel.offer(keyWord)
     }
 
-    override fun getValidKeyWordOrNull(): String? {
+    override fun keyWordOrNull(): String? {
         return  channel.valueOrNull
     }
 
@@ -96,6 +97,7 @@ class TestSearchRepository :SearchRepository{
 @ExperimentalCoroutinesApi
 @Suppress("UNCHECKED_CAST")
 class SearchBarViewModelFactory(val repository: SearchRepository):ViewModelProvider.Factory{
+    @FlowPreview
     override fun <T : ViewModel?> create(p0: Class<T>): T {
         return SearchBarViewModel(repository) as T
     }

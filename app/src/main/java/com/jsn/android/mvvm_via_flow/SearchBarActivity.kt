@@ -41,21 +41,14 @@ class SearchBarActivity  :AppCompatActivity(){
         }
         viewModel.searchResultFlowAsLiveData.observe(this, Observer { searchResult ->
             when(searchResult){
-                is Result.Loading -> {}
+                is Result.Loading -> { }
                 is Result.Error-> { showMessage(searchResult.toString())}
                 is Result.Success -> {adapter.submitList(searchResult.data) }
             }
         })
 
-        et_keyWord.setText(viewModel.keyWord ?: return )
-       /* lifecycleScope.launchWhenStarted {
-           viewModel.searchResultFlow.collect { searchResult ->
-               when(searchResult){
-                   is Result.Loading -> {}
-                   is Result.Error-> { showMessage(searchResult.toString())}
-                   is Result.Success -> {adapter.submitList(searchResult.data) }
-               }
-           }
-        }*/
+        viewModel.keyWord ?.run {
+            et_keyWord.setText(this)
+        }
     }
 }
