@@ -23,14 +23,12 @@ class SearchBarViewModel(val repository :SearchRepository) :ViewModel() {
     val keyWord
     get() = repository.keyWordOrNull()
 
-
     fun offer(keyWord:String) =repository.receiveSearchWords(keyWord)
 
     override fun onCleared() {
         super.onCleared()
         repository.onViewModelClear()
     }
-
 
 }
 
@@ -47,7 +45,7 @@ interface SearchRepository{
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class TestSearchRepository :SearchRepository{
+class MockSearchRepository :SearchRepository{
 
     val channel =ConflatedBroadcastChannel<String>()
 

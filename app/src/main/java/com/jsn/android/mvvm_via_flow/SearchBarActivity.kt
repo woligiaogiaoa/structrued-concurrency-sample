@@ -5,17 +5,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jsn.android.R
 import com.jsn.android.search.Result
-import com.jsn.android.search.SearchActivity
 import com.jsn.android.search.SearchAdapter
 import com.jsn.android.search.showMessage
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.collect
 
 
 @ExperimentalCoroutinesApi
@@ -25,7 +22,8 @@ class SearchBarActivity  :AppCompatActivity(){
     lateinit var adapter: SearchAdapter
 
     val viewModel by viewModels<SearchBarViewModel>(
-        SearchBarViewModelFactory(TestSearchRepository()) )
+        SearchBarActivtityInjector.provideSearchBarViewModelFactory()
+    )
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,4 +49,13 @@ class SearchBarActivity  :AppCompatActivity(){
             et_keyWord.setText(this)
         }
     }
+}
+
+@ExperimentalCoroutinesApi
+@FlowPreview
+object SearchBarActivtityInjector {
+
+    fun getSearchRepository()=MockSearchRepository()
+
+    fun provideSearchBarViewModelFactory()= SearchBarViewModelFactory(getSearchRepository())
 }
