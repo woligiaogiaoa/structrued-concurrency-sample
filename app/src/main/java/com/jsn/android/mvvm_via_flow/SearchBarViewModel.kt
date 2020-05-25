@@ -2,44 +2,82 @@ package com.jsn.android.mvvm_via_flow
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import com.jsn.android.search.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
+@FlowPreview
 @ExperimentalCoroutinesApi
-class SearchBarViewModel :ViewModel() {
+class SearchBarViewModel(val repository :SearchRepository) :ViewModel() {
 
-    //自动处理 backpressure ，真是香
-    /*
-    * 比如我们疯狂的往channel 里面 加数据 ，可是我们 处理它 没那么快啊，毕竟我们是耗时操作，
-    * 由于 是ConflatedBroadcastChannel（channel的一种，缓存大小为1,自动处理背压），那么会取最近传过来的那么值。
-    * 对于我们这个搜索框，这几乎是一种完美的解决方案，避免了资源的浪费，而且channel也是非阻塞的，提升了性能。
-    * */
+    //flow 的逻辑下沉到 repository
 
-    val channel =ConflatedBroadcastChannel<String>() //channel 的缓存大小为 1
+    val searchResultFlowAsLiveData
+            =repository.getSearchResult().asLiveData()
 
-    @FlowPreview
-    val searchResultFlow: Flow<Result<List<String>>> =channel.asFlow()
-        .map { key ->
-            delay(200)
-            Result.Success(repositoty.filter {
-                it.contains(key)
-            }) as Result<List<String>>
-        }
-        .onStart {}
-        .flowOn(Dispatchers.Default)
-        .catch { e:Throwable ->
-            emit(Result.Error(e as Exception))
-        }
+    val keyWord
+    get() = repository.getValidKeyWordOrNull()
+
+
+    fun offer(keyWord:String) =repository.receiveSearchWords(keyWord)
 
     override fun onCleared() {
         super.onCleared()
-        channel.close()
+        repository.onViewModelClear()
     }
+
+
+}
+
+interface SearchRepository{
+
+    fun getSearchResult() :Flow<Result<List<String>>>
+
+    fun onViewModelClear()
+
+    fun receiveSearchWords(keyWord: String)
+
+    fun getValidKeyWordOrNull():String?
+}
+
+@FlowPreview
+@ExperimentalCoroutinesApi
+class TestSearchRepository :SearchRepository{
+
+    val channel =ConflatedBroadcastChannel<String>()
+
+    override fun getSearchResult(): Flow<Result<List<String>>> =
+        channel.asFlow()
+            .onStart {  }
+            .map { key ->
+                Result.Success(repositoty.filter {
+                   it.contains(key)
+                })
+                as Result<List<String>>
+            }
+            .flowOn(Dispatchers.Default)
+            .catch { e ->
+                Result.Error(java.lang.Exception(e.message))
+            }
+
+    override fun onViewModelClear() {
+        onClear()
+    }
+
+    override fun receiveSearchWords(keyWord: String) {
+        channel.offer(keyWord)
+    }
+
+    override fun getValidKeyWordOrNull(): String? {
+        return  channel.valueOrNull
+    }
+
+    fun onClear()=channel.close()
+
 
     val repositoty= mutableListOf<String>().apply {
         //测试数据
@@ -57,8 +95,8 @@ class SearchBarViewModel :ViewModel() {
 
 @ExperimentalCoroutinesApi
 @Suppress("UNCHECKED_CAST")
-class SearchBarViewModelFactory:ViewModelProvider.Factory{
+class SearchBarViewModelFactory(val repository: SearchRepository):ViewModelProvider.Factory{
     override fun <T : ViewModel?> create(p0: Class<T>): T {
-        return SearchBarViewModel() as T
+        return SearchBarViewModel(repository) as T
     }
 }

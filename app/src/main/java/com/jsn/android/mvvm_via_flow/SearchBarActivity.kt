@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jsn.android.R
@@ -24,7 +25,7 @@ class SearchBarActivity  :AppCompatActivity(){
     lateinit var adapter: SearchAdapter
 
     val viewModel by viewModels<SearchBarViewModel>(
-        SearchBarViewModelFactory() )
+        SearchBarViewModelFactory(TestSearchRepository()) )
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,13 +33,22 @@ class SearchBarActivity  :AppCompatActivity(){
         setContentView(R.layout.activity_search)
         rv_search_result.adapter=SearchAdapter().also { adapter=it }
         rv_search_result.layoutManager=LinearLayoutManager(this)
-        et_keyWord.doAfterTextChanged { keyWord->
+
+        et_keyWord.doAfterTextChanged {text->
         with(viewModel){
-               channel.offer(keyWord.toString())
+               offer(keyWord = text.toString())
            }
         }
+        viewModel.searchResultFlowAsLiveData.observe(this, Observer { searchResult ->
+            when(searchResult){
+                is Result.Loading -> {}
+                is Result.Error-> { showMessage(searchResult.toString())}
+                is Result.Success -> {adapter.submitList(searchResult.data) }
+            }
+        })
 
-        lifecycleScope.launchWhenStarted {
+        et_keyWord.setText(viewModel.keyWord ?: return )
+       /* lifecycleScope.launchWhenStarted {
            viewModel.searchResultFlow.collect { searchResult ->
                when(searchResult){
                    is Result.Loading -> {}
@@ -46,6 +56,6 @@ class SearchBarActivity  :AppCompatActivity(){
                    is Result.Success -> {adapter.submitList(searchResult.data) }
                }
            }
-        }
+        }*/
     }
 }
