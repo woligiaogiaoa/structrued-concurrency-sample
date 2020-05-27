@@ -18,8 +18,8 @@ class SearchBarViewModel(val repository :SearchRepository) :ViewModel() {
 
     //flow 的逻辑下沉到 repository
 
-    val searchResultFlowAsLiveData
-            =repository.getSearchResult().asLiveData()
+    val searchResultFlow
+            =repository.getSearchResult()
 
     val keyWord
     get() = repository.keyWordOrNull()
@@ -45,6 +45,7 @@ interface SearchRepository{
 }
 
 class StateFlowRepository():SearchRepository{
+
 
     var keyWordFlow= MutableStateFlow<String>("")
 
