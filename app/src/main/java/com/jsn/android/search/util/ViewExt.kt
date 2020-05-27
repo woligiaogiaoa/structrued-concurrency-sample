@@ -7,8 +7,8 @@ import android.view.View
 import android.view.WindowInsets
 import androidx.annotation.RequiresApi
 import androidx.databinding.BindingAdapter
-
-
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 
 /** Combination of all flags required to put activity into immersive mode */

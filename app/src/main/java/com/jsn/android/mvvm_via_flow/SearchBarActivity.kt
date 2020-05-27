@@ -25,7 +25,6 @@ class SearchBarActivity  :AppCompatActivity(){
         SearchBarActivtityInjector.provideSearchBarViewModelFactory()
     )
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)

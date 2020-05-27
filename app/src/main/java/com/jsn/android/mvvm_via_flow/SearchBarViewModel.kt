@@ -51,7 +51,7 @@ class StateFlowRepository():SearchRepository{
     val resultFlow=
         keyWordFlow.map { keyWord ->
             delay(200)
-            var filtered = repositotyData.filter {
+            var filtered = repositoryData.filter {
                 it.contains(keyWord, true)
             }
             if(keyWord.isEmpty()){ filtered= emptyList() }
@@ -87,7 +87,7 @@ class ChannelSearchRepository :SearchRepository{ //测试用的repo
         channel.asFlow()
             .onStart {  }
             .map { key ->
-                Result.Success(repositotyData.filter {
+                Result.Success(repositoryData.filter {
                    it.contains(key)
                 })
                 as Result<List<String>>
@@ -116,7 +116,7 @@ class ChannelSearchRepository :SearchRepository{ //测试用的repo
 
 }
 
-val repositotyData= mutableListOf<String>().apply {
+val repositoryData= mutableListOf<String>().apply {
     //测试数据
     add("123我爱你");add("17岁");add("123木头人")
     add("11111");add("1234");add("1990");add("1111");add("111");add("119")
