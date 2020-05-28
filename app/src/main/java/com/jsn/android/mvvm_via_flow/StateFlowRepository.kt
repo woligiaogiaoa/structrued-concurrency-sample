@@ -1,16 +1,15 @@
 package com.jsn.android.mvvm_via_flow
 
 import com.jsn.android.SearchRepository
-import com.jsn.android.mvvm_via_flow.di.ActivityScope
+import com.jsn.android.mvvm_via_flow.di.SearchBarActivityScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import javax.inject.Inject
-import javax.inject.Singleton
 import com.jsn.android.search.Result
 import kotlinx.coroutines.flow.*
 import java.lang.Exception
 
-@ActivityScope
+@SearchBarActivityScope
 class StateFlowRepository @Inject constructor() : SearchRepository {
 
     var keyWordFlow = MutableStateFlow<String>("")

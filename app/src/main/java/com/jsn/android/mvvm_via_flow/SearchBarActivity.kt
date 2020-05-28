@@ -68,7 +68,7 @@ class SearchBarActivity : AppCompatActivity() {
 @FlowPreview
 object SearchBarActivtityInjector {
 
-    fun getSearchRepository() = StateFlowRepository() //注入测试用的repository
+    fun getSearchRepository() = StateFlowRepository() //choose a repository
 
-    fun provideSearchBarViewModelFactory() = SearchBarViewModelFactory(getSearchRepository())
+    /*fun provideSearchBarViewModelFactory() = SearchBarViewModelFactory(getSearchRepository())*/
 }

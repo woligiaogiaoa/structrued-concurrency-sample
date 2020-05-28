@@ -1,5 +1,6 @@
 package com.jsn.android.mvvm_via_flow
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
@@ -18,7 +19,7 @@ import com.jsn.android.search.Result
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class SearchBarViewModel(val repository :SearchRepository) :ViewModel() {
+class SearchBarViewModel(val repository :SearchRepository,val application: Application) :ViewModel() {
 
     //flow 的逻辑下沉到 repository
 
