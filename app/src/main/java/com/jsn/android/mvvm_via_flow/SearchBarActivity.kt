@@ -8,7 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jsn.android.MApp
 import com.jsn.android.R
-import com.jsn.android.mvvm_via_flow.di.DaggerAppComponent
+import com.jsn.android.mvvm_via_flow.data.StateFlowRepository
 import com.jsn.android.search.Result
 import com.jsn.android.search.SearchAdapter
 import com.jsn.android.search.showMessage
@@ -68,7 +68,8 @@ class SearchBarActivity : AppCompatActivity() {
 @FlowPreview
 object SearchBarActivtityInjector {
 
-    fun getSearchRepository() = StateFlowRepository() //choose a repository
+    fun getSearchRepository() =
+        StateFlowRepository() //choose a repository
 
     /*fun provideSearchBarViewModelFactory() = SearchBarViewModelFactory(getSearchRepository())*/
 }

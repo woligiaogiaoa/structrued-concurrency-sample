@@ -1,7 +1,8 @@
-package com.jsn.android.mvvm_via_flow
+package com.jsn.android.mvvm_via_flow.data
 
 import com.jsn.android.SearchRepository
 import com.jsn.android.mvvm_via_flow.di.SearchBarActivityScope
+import com.jsn.android.mvvm_via_flow.repositoryData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import javax.inject.Inject
